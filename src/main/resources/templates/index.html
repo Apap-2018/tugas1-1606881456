@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Home</title>
+	<object th:include="fragments/fragment :: css" th:remove="tag"></object>
+	<object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+
+<body>
+	<nav th:replace="fragments/fragment :: navbar"></nav>
+	
+	<div class="container-fluid">
+		<h2>Sistem Informasi Kepegawaian</h2>
+		<h4>Selamat datang di Sistem Informasi Kepegawaian</h4>
+		<br>
+		<hr>
+		<div class ="row">
+			<div class="col-md-6">
+				<div class="card">
+					<div class="card-header">
+						Lihat Data Pegawai berdasarkan NIP
+					</div>
+					<form th:action="@{/pegawai}" method="GET">
+						<div class=card-body>
+							<label for ="nip">Masukkan Nomor Induk Pegawai:</label>
+							<input type="text" name="nip" class="form-control" />
+							<p></p>
+							<button type="submit" class="btn btn-primary">Cari</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<br><hr><br>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="card">
+					<div class="card-header">
+						Lihat Detail Jabatan
+					</div>
+						<div class="card-body">
+							<label for="id">Pilih Jabatan:</label>
+								<form th:action="@{/jabatan/view}" method="GET">
+									<select class="form-control" name="idJabatan">
+				    					<option th:each="jabatan : ${listJabatan}" th:value="${jabatan.id}" th:text="${jabatan.nama}"></option>
+									</select><br>
+									<br>	
+									<button type="submit" class="btn btn-primary">Lihat</button>		
+								</form>
+							<p></p>
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>

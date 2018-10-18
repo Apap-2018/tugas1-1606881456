@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>View Pegawai</title>
+		<object th:include="fragments/fragment :: css" th:remove="tag"></object>
+		<object th:include="fragments/fragment :: js" th:remove="tag"></object>	
+	</head>
+	
+	<body>
+		<nav th:replace="fragments/fragment :: navbar"></nav>
+		<br>
+		<h2 th:text = "'Lihat Data Pegawai - ' + ${pegawai.nip}"></h2>
+		<table cellpadding="20">
+			<tr>
+				<td>NIP</td>
+				<td th:text="${pegawai.nip}"></td>
+			</tr>
+			<tr>
+				<td>Nama</td>
+				<td th:text="${pegawai.nama}"></td>
+			</tr>
+			<tr>
+				<td>Tempat Lahir</td>
+				<td th:text="${pegawai.tempatLahir}"></td>
+			</tr>
+			<tr>
+				<td>Tanggal Lahir</td>
+				<td th:text="${pegawai.tanggalLahir}"></td>
+			</tr>
+			<tr>
+				<td>Tahun Masuk</td>
+				<td th:text="${pegawai.tahunMasuk}"></td>
+			</tr>
+			<tr>
+				<td>Nama Instansi</td>
+				<td th:text="${pegawai.instansi.nama} + ' - ' + ${pegawai.instansi.provinsi.nama}"></td>
+			</tr>
+			<tr>
+				<td>Jabatan</td>	
+				<td>
+				<th:block th:each="jabatans : ${jabatanPegawai}">
+					<p th:text="${jabatans.jabatan.nama}"></p>		
+				</td>
+			</tr>	
+			<tr>
+				<td>Gaji</td>
+				<td th:text="'Rp '+${gajiPegawai}"></td>
+			</tr>
+			<tr>
+				<td>
+					<button type=submit class="btn btn-primary" >Ubah</button>			
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>
