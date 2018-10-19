@@ -1,10 +1,13 @@
 package com.apap.tugas1.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.apap.tugas1.model.InstansiModel;
 import com.apap.tugas1.model.PegawaiModel;
 import com.apap.tugas1.repository.PegawaiDb;
 
@@ -25,6 +28,26 @@ public class PegawaiServiceImpl implements PegawaiService{
 		// TODO Auto-generated method stub
 		pegawaiDb.save(pegawai);
 		
+	}
+
+	@Override
+	public List<PegawaiModel> getAllPegawai() {
+		// TODO Auto-generated method stub
+		return pegawaiDb.findAll();
+	}
+
+	@Override
+	public PegawaiModel getPegawaiTertua(InstansiModel instansi) {
+		// TODO Auto-generated method stub
+		List<PegawaiModel> listPegawai = pegawaiDb.findByInstansiOrderByTanggalLahirAsc(instansi);
+		return listPegawai.get(0);
+	}
+
+	@Override
+	public PegawaiModel getPegawaiTermuda(InstansiModel instansi) {
+		// TODO Auto-generated method stub
+		List<PegawaiModel> listPegawai = pegawaiDb.findByInstansiOrderByTanggalLahirAsc(instansi);
+		return listPegawai.get(listPegawai.size()-1);
 	}
 	
 }

@@ -1,5 +1,7 @@
 package com.apap.tugas1.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.apap.tugas1.model.InstansiModel;
 import com.apap.tugas1.model.JabatanModel;
 import com.apap.tugas1.model.JabatanPegawaiModel;
 import com.apap.tugas1.model.PegawaiModel;
+import com.apap.tugas1.service.InstansiService;
 import com.apap.tugas1.service.JabatanPegawaiService;
 import com.apap.tugas1.service.JabatanService;
 import com.apap.tugas1.service.PegawaiService;
@@ -29,15 +33,20 @@ public class PegawaiController {
 	@Autowired
 	private JabatanService jabatanService;
 	
+	@Autowired
+	private InstansiService instansiService;
+	
 	@RequestMapping("/")
 	private String index(Model model) {
 		List<JabatanModel> jabatan = jabatanService.getAll();
         model.addAttribute("listJabatan", jabatan);
+        List<InstansiModel> instansi = instansiService.getAllInstansi();
+        model.addAttribute("listInstansi", instansi);
 		return "index";
 	}
 
 	@RequestMapping(value="/pegawai", method = RequestMethod.GET)
-	private String viewPilot(@RequestParam("nip") String nip, Model model ) {
+	private String viewPegawai(@RequestParam("nip") String nip, Model model ) {
 		PegawaiModel pegawai = pegawaiService.getPegawaiDetailByNip(nip);
 		List<JabatanPegawaiModel> jabatan = jabatanPegawaiService.getJabatanByNip(nip).get();
 		//ngitung gaji
@@ -53,6 +62,18 @@ public class PegawaiController {
 		model.addAttribute("jabatanPegawai", jabatan);
 		model.addAttribute("gajiPegawai", (long)gajiPegawai);
 		return "view-pegawai";
+	}
+	
+	@RequestMapping(value="/pegawai/termuda-tertua", method = RequestMethod.GET)
+	private String viewPegawaiMudaTua(@RequestParam("idInstansi") Long id, Model model) {
+		InstansiModel instansi = instansiService.findInstansiById(id);
+		List<JabatanPegawaiModel> jabatan = jabatanPegawaiService.getPegawaiByJabatanId(id);
+		PegawaiModel pegawaiMuda = pegawaiService.getPegawaiTermuda(instansi);
+		PegawaiModel pegawaiTertua = pegawaiService.getPegawaiTertua(instansi);
+		model.addAttribute("pegawaiMuda", pegawaiMuda);
+		model.addAttribute("pegawaiTua", pegawaiTertua);
+		model.addAttribute("jabatanPegawai", jabatan);
+		return "view-tua-muda";
 	}
 	
 }
