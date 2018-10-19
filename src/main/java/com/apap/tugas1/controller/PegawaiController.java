@@ -67,12 +67,15 @@ public class PegawaiController {
 	@RequestMapping(value="/pegawai/termuda-tertua", method = RequestMethod.GET)
 	private String viewPegawaiMudaTua(@RequestParam("idInstansi") Long id, Model model) {
 		InstansiModel instansi = instansiService.findInstansiById(id);
-		List<JabatanPegawaiModel> jabatan = jabatanPegawaiService.getPegawaiByJabatanId(id);
 		PegawaiModel pegawaiMuda = pegawaiService.getPegawaiTermuda(instansi);
 		PegawaiModel pegawaiTertua = pegawaiService.getPegawaiTertua(instansi);
+		
+		List<JabatanPegawaiModel> jabatanMuda = jabatanPegawaiService.getJabatanByNip(pegawaiMuda.getNip()).get();
+		List<JabatanPegawaiModel> jabatanTua = jabatanPegawaiService.getJabatanByNip(pegawaiTertua.getNip()).get();
 		model.addAttribute("pegawaiMuda", pegawaiMuda);
 		model.addAttribute("pegawaiTua", pegawaiTertua);
-		model.addAttribute("jabatanPegawai", jabatan);
+		model.addAttribute("jabatanMuda", jabatanMuda);
+		model.addAttribute("jabatanTua",jabatanTua);
 		return "view-tua-muda";
 	}
 	
