@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+	<title>View Jabatan</title>
     <object th:include="fragments/fragment :: css" th:remove="tag"></object>
     <object th:include="fragments/fragment :: js" th:remove="tag"></object>
 </head>
@@ -22,6 +23,10 @@
     <tr>
         <td>Gaji Pokok</td>
         <td th:text="${jabatan.gaji_pokok}"></td>
+    </tr>
+    <tr>
+        <td>Jumlah Pegawai</td>
+        <td th:text="${count}"></td>
     </tr>
     <tr>
     	<td>

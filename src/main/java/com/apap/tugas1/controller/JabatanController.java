@@ -1,6 +1,8 @@
 package com.apap.tugas1.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import com.apap.tugas1.model.JabatanModel;
 import com.apap.tugas1.model.JabatanPegawaiModel;
 import com.apap.tugas1.service.JabatanPegawaiService;
 import com.apap.tugas1.service.JabatanService;
+import com.apap.tugas1.service.PegawaiService;
 
 @Controller
 public class JabatanController {
@@ -73,5 +76,23 @@ public class JabatanController {
 		List<JabatanModel> jabatanList = jabatanService.getAll();
 		model.addAttribute("jabatanList", jabatanList);
 		return "view-jabatanAll";
+	}
+	
+	@RequestMapping(value="/jabatan/view-jumlah")
+	private String viewJumlah(Model model) {
+		Map<JabatanModel, Integer> data = new HashMap<JabatanModel, Integer>();
+		List<JabatanModel> listJabatan = jabatanService.getAll();
+		for(JabatanModel jabatan : listJabatan) {
+			data.put(jabatan, 0);
+		}
+		
+		List<JabatanPegawaiModel> listJabatanPegawai = jabatanPegawaiService.getAll();
+		for(JabatanPegawaiModel jabatanPegawai : listJabatanPegawai) {
+			if(data.containsKey(jabatanPegawai.getJabatan())) {
+				data.put(jabatanPegawai.getJabatan(), data.get(jabatanPegawai.getJabatan())+1);
+			}
+		}
+		model.addAttribute("data", data);
+		return "view-jumlah";
 	}
 }

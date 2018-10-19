@@ -4,16 +4,23 @@
 <head>
 	<title>View Jabatan</title>
 	<object th:include="fragments/fragment :: css" th:remove="tag"></object>
-	<object th:include="fragments/fragment :: js" th:remove="tag"></object>	
+	<object th:include="fragments/fragment :: js" th:remove="tag"></object>
+	<link rel="stylesheet" type="text/css" th:href="@{//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{//cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css}"/>
 </head>
 
 <body>
 	<nav th:replace="fragments/fragment :: navbar"></nav>
 	
-	<div>
-		<table id="example" class="display" style="width:100%">
+	<br>
+	<h2>Seluruh Jabatan</h2>
+	<br><hr><br>
+	<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+		<table id="example" class="display table table-striped table-bordered" style="width:100%">
      		<thead>
-     			<tr>	
+     			<tr align="center">	
      				<th>Nama</th>
      				<th>Deskripsi</th>
      				<th>Gaji_Pokok</th>
@@ -28,12 +35,14 @@
      			</tr>
      		</tbody>
 	    </table>
+	   </div>
+	   </div>
 	</div>   
 	
-	 <script src = "https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src = "https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
-	<script src = "https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
-    <script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" src=https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+	<script>
 	    $(document).ready(function() {
 	        $('#example').DataTable( {
 	            "pagingType": "full_numbers"
