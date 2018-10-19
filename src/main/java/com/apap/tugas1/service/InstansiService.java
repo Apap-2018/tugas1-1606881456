@@ -7,4 +7,5 @@ import com.apap.tugas1.model.InstansiModel;
 public interface InstansiService {
 	List<InstansiModel> getAllInstansi();
 	InstansiModel findInstansiById(long id);
+	List<InstansiModel> getAll();
 }

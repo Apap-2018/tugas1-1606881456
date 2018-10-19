@@ -8,19 +8,28 @@
 
 <body>
 	<nav th:replace="fragments/fragment :: navbar"></nav>
-	<h3>Update Jabatan</h3>
+	
+<div class="container-fluid">
+		<div class ="row">
+			<div class="col-md-8">
+				<div class="card">
+					<div class="card-header" align="center">
+						<h3>Ubah Detail Jabatan</h3>
+					</div>
 	<form th:action="@{/jabatan/ubah}" th:object="${jabatan}" method = "POST">
-		<input type="hidden" name="id" th:value="${jabatan.id}" />
+	<div class=card-body>
+		<input type="hidden" name="id" th:value="${jabatan.id}" class="form-control" />
 		Nama: <br>
-		<input type="text" name = "nama" th:value="${jabatan.nama}"/>
+		<input type="text" name = "nama" th:value="${jabatan.nama}" class="form-control"/>
 		<br>
 		Deskripsi: <br>
-		<input type="text" name ="deskripsi" th:value="${jabatan.deskripsi}" />
+		<input type="text" name ="deskripsi" th:value="${jabatan.deskripsi}" class="form-control" />
 		<br>
 		Gaji Pokok: <br>
-		<input type="number" name = "gaji_pokok" th:value="${jabatan.gaji_pokok}"/>
+		<input type="number" name = "gaji_pokok" th:value="${jabatan.gaji_pokok}" class="form-control"/>
 		<br><br>
-		<button type="submit">Submit</button>
+		<button type="submit" class="btn btn-primary">Submit</button>
+		</div>
 	</form>
 </body>
 

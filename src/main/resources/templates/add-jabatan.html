@@ -9,14 +9,14 @@
 <body>
 	<nav th:replace="fragments/fragment :: navbar"></nav>
 	<div class="container-fluid">
-		<div class="row">
+		<div class="row" >
 			<div class="col-md-6">
 				<div class="card">
-					<div class="card-header">
-						Tambah Jabatan
+					<div class="card-header" align="center">
+						<h3 align ="center">Tambah Jabatan</h3>
 					</div>
 						<form th:action="@{/jabatan/tambah}" th:object=${jabatan} method="POST">
-							<table>
+							<table cellpadding ="10" align="center">
 								<tr>
 									<td>Nama</td>
 									<td><input type="text" name="nama" class="form-control"/></td>

@@ -11,7 +11,14 @@
 <br>
 <h3 th:text="'Detail Jabatan ' + ${jabatan.nama}"></h3>
 <br><hr><br>
-<table cellpadding="20">
+<div class="container-fluid" align="center">
+		<div class ="row">
+			<div class="col-md-8">
+				<div class="card">
+					<div class="card-header" align="center">
+						<h3>Detail Jabatan</h3>
+					</div>
+<table  cellpadding ="10" align="center">
     <tr>
         <td>Nama</td>
         <td th:text="${jabatan.nama}"></td>
@@ -43,6 +50,10 @@
     	</td>
     </tr>
 </table>
+</div>
+</div>
+</div>
+</div>
 <br>
 </body>
 </html>
