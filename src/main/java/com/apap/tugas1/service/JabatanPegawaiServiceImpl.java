@@ -36,6 +36,12 @@ public class JabatanPegawaiServiceImpl implements JabatanPegawaiService{
 		return jabatanPegawaiDb.findAll();
 	}
 
+	@Override
+	public void addJabatanPegawai(JabatanPegawaiModel jabatanPegawai) {
+		// TODO Auto-generated method stub
+		jabatanPegawaiDb.save(jabatanPegawai);
+	}
+
 
 
 }

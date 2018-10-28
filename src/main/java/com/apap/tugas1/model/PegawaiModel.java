@@ -64,6 +64,20 @@ public class PegawaiModel implements Serializable{
 	@OnDelete(action=OnDeleteAction.NO_ACTION)
 	@JsonIgnore
 	private InstansiModel instansi;
+	
+	@OneToMany(mappedBy="pegawai", fetch=FetchType.LAZY)
+	@OnDelete(action= OnDeleteAction.CASCADE)
+	@JsonIgnore
+	private List<JabatanPegawaiModel> listJabatan;
+	
+	
+	public List<JabatanPegawaiModel> getListJabatan() {
+		return listJabatan;
+	}
+
+	public void setListJabatan(List<JabatanPegawaiModel> listJabatan) {
+		this.listJabatan = listJabatan;
+	}
 
 	public long getId() {
 		return id;

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Tambah Pegawai</title>
+	<object th:include="fragments/fragment :: css" th:remove="tag"></object>
+	<object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+
+<body>
+	<nav th:replace="fragments/fragment :: navbar"></nav>
+	<div class="container-fluid">
+		<div class="row" >
+			<div class="col-md-6">
+				<div class="card">
+					<div class="card-header" align="center">
+						<h3 align ="center">Tambah Pegawai</h3>
+					</div>
+						<form th:action="@{/pegawai/tambah}" th:object=${pegawai} method="POST">
+							<table cellpadding ="10" align="center">
+								<tr>
+									<td>Nama</td>
+									<td><input type="text" name="nama" class="form-control"/></td>
+								</tr>
+								<tr>
+									<td>Tempat Lahir</td>
+									<td><input type="text" name="tempatLahir" class="form-control"/></td>
+								</tr>
+								<tr>
+									<td>Tanggal Lahir</td>
+									<td><input type="Date" name="tanggalLahir" class="form-control"/></td>
+								</tr>
+								<tr>
+									<td>Tahun Masuk</td>
+									<td><input type="number" name="tahunMasuk" class="form-control"/></td>
+								</tr>
+								<tr>
+									<td>Provinsi</td>
+									<td>
+										<select class="form-control" required="required" name="provinsi" id="provinsi">
+											<option th:each="provinsi : ${daftarProvinsi}" th:value="${provinsi.id}" th:text="${provinsi.nama}" ></option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>Instansi</td>
+									<td>
+										<select class="form-control" required="required" name="instansi.id" id="instansi">
+											<option th:each="instansi : ${daftarInstansi}" th:value="${instansi.id}" th:text="${instansi.nama}" ></option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>Jabatan</td>
+		            				<td th:each="jabatanPegawai, statusJabatan : *{listJabatan}">
+		            					<select class="form-control" required="required" th:field="*{listJabatan[__${statusJabatan.index}__].jabatan}">
+							    			<option th:each="jabatan, status : ${daftarJabatan}" th:value="${jabatan.id}" th:text="${jabatan.nama}"></option>
+										</select>
+		            				</td>
+								</tr>
+								<tr>
+			            			<td></td>
+			            			<td><button type="submit" name="addJabatan" class="btn btn-info">Tambah Jabatan</button></td>
+		            			</tr>
+		            			<tr>
+		                			<td><button type="submit" name="save" class="btn btn-primary">Tambah Pegawai</button><td>
+		            			</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+</body>
+</html>
