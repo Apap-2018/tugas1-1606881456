@@ -58,45 +58,47 @@ public class PegawaiServiceImpl implements PegawaiService{
 	@Override
 	public String generateNip(PegawaiModel pegawai) {
 		// TODO Auto-generated method stub
-		String nip ="";
+		String nip = "";
 		nip += pegawai.getInstansi().getId();
-		Date tgl = pegawai.getTanggalLahir();
-		String[] tglLahir =(""+tgl).split("-");
-		for(int i = tglLahir.length-1; i>=0; i--) {
-			nip+=tglLahir[i].substring(tglLahir[i].length()-2, tglLahir[i].length());
+		Date date = pegawai.getTanggalLahir();
+		String[] tgl = (""+date).split("-");
+		for (int i = tgl.length-1; i >= 0; i--) {
+			int ukuranTgl = tgl[i].length();
+			nip += tgl[i].substring(ukuranTgl-2, ukuranTgl);
 		}
-		nip+=pegawai.getTahunMasuk();
-		List<PegawaiModel> listPegawai = pegawaiDb.findByTanggalLahirAndTahunMasukAndInstansi(tgl, pegawai.getTahunMasuk(), pegawai.getInstansi());
-		if(listPegawai.size()<10) {
-			nip+="0"+listPegawai.size();
+		nip += pegawai.getTahunMasuk();
+		List<PegawaiModel> listPegawai = pegawaiDb.findByTanggalLahirAndTahunMasukAndInstansi(date, pegawai.getTahunMasuk(), pegawai.getInstansi());
+		if(listPegawai.size() < 10) {
+			nip += "0"+listPegawai.size();
 		}
 		else {
-			nip+=listPegawai.size();
+			nip += listPegawai.size();
 		}
 		pegawai.setNip(nip);
+		System.out.println(nip);
 		return nip;
 	}
 
 	@Override
-	public void updatePegawai(PegawaiModel pegawai, String nip) {
-		PegawaiModel newPegawai = pegawaiDb.findByNip(nip);
-		newPegawai.setNama(pegawai.getNama());
-		newPegawai.setNip(pegawai.getNip());
-		newPegawai.setTahunMasuk(pegawai.getTahunMasuk());
-		newPegawai.setTanggalLahir(pegawai.getTanggalLahir());
-		newPegawai.setTempatLahir(pegawai.getTempatLahir());
-		newPegawai.setInstansi(pegawai.getInstansi());
-		newPegawai.setListJabatan(pegawai.getListJabatan());
-		int jumlahList = pegawai.getListJabatan().size();
-		for (int i = 0; i<jumlahList; i++) {
-			pegawai.getListJabatan().get(i).setJabatan(newPegawai.getListJabatan().get(i).getJabatan());
+	public void updatePegawai(PegawaiModel oldPegawai, PegawaiModel newPegawai) {
+		// TODO Auto-generated method stub
+		newPegawai.setNama(oldPegawai.getNama());
+		newPegawai.setNip(oldPegawai.getNip());
+		newPegawai.setTahunMasuk(oldPegawai.getTahunMasuk());
+		newPegawai.setTanggalLahir(oldPegawai.getTanggalLahir());
+		newPegawai.setTempatLahir(oldPegawai.getTempatLahir());
+		newPegawai.setInstansi(oldPegawai.getInstansi());
+		int jumlahList = oldPegawai.getListJabatan().size();
+		for (int i = 0; i< jumlahList; i++) {
+			oldPegawai.getListJabatan().get(i).setJabatan(newPegawai.getListJabatan().get(i).getJabatan());
 		}
 		
 		for (int i = jumlahList; i < newPegawai.getListJabatan().size(); i++) {
-			newPegawai.getListJabatan().get(i).setPegawai(pegawai);
+			newPegawai.getListJabatan().get(i).setPegawai(oldPegawai);
 			jabatanPegawaiDb.save(newPegawai.getListJabatan().get(i));
 		}
 		pegawaiDb.save(newPegawai);
+		
 	}
 	
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>Update Pegawai</title>
+	<title>Tambah Pegawai</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>	
 	<object th:include="fragments/fragment :: css" th:remove="tag"></object>
@@ -15,7 +15,7 @@
 			<div class="col-md-6">
 				<div class="card">
 					<div class="card-header" align="center">
-						<h3 align ="center">Update Pegawai</h3>
+						<h3 align ="center">Add Pegawai</h3>
 					</div>
 						<form th:action="@{/pegawai/tambah}" th:object=${pegawai} method="POST">
 							<input type="hidden" name = "nip" th:value="${pegawai.nip}">
@@ -68,7 +68,7 @@
 			            			<td><button type="submit" name="addJabatan" class="btn btn-info">Tambah Jabatan</button></td>
 		            			</tr>
 		            			<tr>
-		                			<td><button type="submit" name="save" class="btn btn-primary">Submit Perubahan</button><td>
+		                			<td><button type="submit" name="save" class="btn btn-primary">Submit</button><td>
 		            			</tr>
 							</table>
 						</form>

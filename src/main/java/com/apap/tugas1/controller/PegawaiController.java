@@ -180,11 +180,12 @@ public class PegawaiController {
 	
 	
 	@RequestMapping(value="/pegawai/ubah", method=RequestMethod.POST)
-	private String submitUbahPegawai(@ModelAttribute PegawaiModel newPegawai) {
-		PegawaiModel pegawai = pegawaiService.getPegawaiDetailByNip(newPegawai.getNip());
+	private String submitUbahPegawai(@ModelAttribute PegawaiModel newPegawai, Model model) {
+		PegawaiModel oldPegawai = pegawaiService.getPegawaiDetailByNip(newPegawai.getNip());
 		String nip = pegawaiService.generateNip(newPegawai);
 		newPegawai.setNip(nip);
-		pegawaiService.updatePegawai(newPegawai, pegawai.getNip());
+		pegawaiService.updatePegawai(oldPegawai, newPegawai);
+		model.addAttribute("pegawai", newPegawai);
 		return "suksesUbah";
 	}
 	
@@ -193,5 +194,17 @@ public class PegawaiController {
 		ProvinsiModel provinsi = provinsiService.getProvinsiById(provinsiId);
 		List<InstansiModel> daftarInstansi = instansiService.getInstansiByProvinsi(provinsi);
 		return daftarInstansi;
+	}
+	
+	@RequestMapping (value = "pegawai/cari", method = RequestMethod.GET)
+	public String cariPegawaiGet (@RequestParam (value = "idProvinsi", required = false) String idProvinsi,
+								@RequestParam (value = "idInstansi", required = false) String idInstansi,
+								@RequestParam (value = "idJabatan", required = false) String idJabatan,
+								Model model) {
+		List<ProvinsiModel> daftarProvinsi = provinsiService.getAllProvinsi();
+		List<InstansiModel> daftarInstansi = instansiService.getAllInstansi();
+		List<JabatanModel> daftarJabatan = jabatanService.getAll();
+		
+		return "cari";
 	}
 }
