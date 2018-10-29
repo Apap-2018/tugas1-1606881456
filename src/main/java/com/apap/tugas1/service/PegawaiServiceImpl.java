@@ -1,6 +1,7 @@
 package com.apap.tugas1.service;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apap.tugas1.model.InstansiModel;
+import com.apap.tugas1.model.JabatanModel;
+import com.apap.tugas1.model.JabatanPegawaiModel;
 import com.apap.tugas1.model.PegawaiModel;
 import com.apap.tugas1.repository.JabatanPegawaiDb;
 import com.apap.tugas1.repository.PegawaiDb;
@@ -99,6 +102,42 @@ public class PegawaiServiceImpl implements PegawaiService{
 		}
 		pegawaiDb.save(newPegawai);
 		
+	}
+
+	@Override
+	public List<PegawaiModel> getPegawaiByInstansi(InstansiModel instansi) {
+		// TODO Auto-generated method stub
+		return pegawaiDb.findByInstansi(instansi);
+	}
+	
+	@Override
+	public List<PegawaiModel> findPegawaiByInstansiAndJabatan(InstansiModel instansi, JabatanModel jabatan) {
+		List<PegawaiModel> pegawaiInstansi = instansi.getListPegawai();
+		List<PegawaiModel> pencarian = new ArrayList<>();
+		long idJabatan = jabatan.getId();
+		
+		for(PegawaiModel peg : pegawaiInstansi) {
+			for(JabatanPegawaiModel jab: peg.getListJabatan()) {
+				if(jab.getJabatan().getId() == idJabatan) {
+					pencarian.add(peg);
+				}
+			}
+		}
+		return pencarian;
+	}
+	
+	@Override
+	public List<PegawaiModel> findPegawaiByProvinsiAndJabatan(List<PegawaiModel> pegawaiProvinsi, JabatanModel jabatan) {
+		List<PegawaiModel> pencarian = new ArrayList<>();
+		
+		for(PegawaiModel peg: pegawaiProvinsi) {
+			for(JabatanPegawaiModel jab: peg.getListJabatan()) {
+				if(jab.getJabatan().getId() == jabatan.getId()) {
+					pencarian.add(peg);
+				}
+			}
+		}
+		return pencarian;
 	}
 	
 }

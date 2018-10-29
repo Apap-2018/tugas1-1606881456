@@ -3,6 +3,7 @@ package com.apap.tugas1.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -189,22 +190,76 @@ public class PegawaiController {
 		return "suksesUbah";
 	}
 	
-	@RequestMapping(value="/pegawai/cekInstansi", method=RequestMethod.GET)
-	private @ResponseBody List<InstansiModel> findAllInstansi(@RequestParam(value="provinsiId", required=true) Long provinsiId){
-		ProvinsiModel provinsi = provinsiService.getProvinsiById(provinsiId);
-		List<InstansiModel> daftarInstansi = instansiService.getInstansiByProvinsi(provinsi);
-		return daftarInstansi;
+	@RequestMapping(value = "/pegawai/instansi", method = RequestMethod.GET)
+	public @ResponseBody
+	List<InstansiModel> findAllInstansi(
+	        @RequestParam(value = "idProvinsi", required = true) Long idProvinsi) {
+		ProvinsiModel provinsi = provinsiService.getProvinsiById(idProvinsi);
+		List<InstansiModel> instansi = instansiService.getInstansiByProvinsi(provinsi);
+	    return instansi;
 	}
 	
-	@RequestMapping (value = "pegawai/cari", method = RequestMethod.GET)
-	public String cariPegawaiGet (@RequestParam (value = "idProvinsi", required = false) String idProvinsi,
-								@RequestParam (value = "idInstansi", required = false) String idInstansi,
-								@RequestParam (value = "idJabatan", required = false) String idJabatan,
-								Model model) {
-		List<ProvinsiModel> daftarProvinsi = provinsiService.getAllProvinsi();
-		List<InstansiModel> daftarInstansi = instansiService.getAllInstansi();
-		List<JabatanModel> daftarJabatan = jabatanService.getAll();
+	@RequestMapping(path="/pegawai/cari", method = RequestMethod.GET)
+	private String cariPegawai(Optional<String> idProvinsi, Optional<String> idInstansi, Optional<String> idJabatan, Model model) {
+		List<ProvinsiModel> listProvinsi = provinsiService.getAllProvinsi();
+		List<JabatanModel> listJabatan = jabatanService.getAll();
+		model.addAttribute("listProvinsi",listProvinsi);
+		model.addAttribute("listJabatan", listJabatan);
 		
-		return "cari";
+		List<PegawaiModel> pegawai= null;
+		if(idProvinsi.isPresent()) {
+			ProvinsiModel provinsi = provinsiService.getProvinsiById(Long.parseLong(idProvinsi.get()));
+			if(idInstansi.isPresent()) {
+				InstansiModel instansi = instansiService.findInstansiById(Long.parseLong(idInstansi.get()));
+				if(idJabatan.isPresent()) {
+					JabatanModel jabatan = jabatanService.getJabatanById(Long.parseLong(idJabatan.get())).get();
+					pegawai = pegawaiService.findPegawaiByInstansiAndJabatan(instansi, jabatan);
+				}
+				else {
+					pegawai = instansi.getListPegawai();
+				}
+			} else {
+				List<InstansiModel> instansi = provinsi.getListInstansi();
+				pegawai = instansi.get(0).getListPegawai();
+				for(int x = 1;x < instansi.size();x++) {
+					List<PegawaiModel> pegProv = instansi.get(x).getListPegawai();
+					for(PegawaiModel peg:pegProv) {
+						pegawai.add(peg);
+					}
+				}
+				
+				if (idJabatan.isPresent()) {
+					JabatanModel jabatan = jabatanService.getJabatanById(Long.parseLong(idJabatan.get())).get();
+					pegawai = pegawaiService.findPegawaiByProvinsiAndJabatan(pegawai, jabatan);
+				}
+			}
+			
+		} else {
+			if(idJabatan.isPresent()) {
+				JabatanModel jabatan = jabatanService.getJabatanById(Long.parseLong(idJabatan.get())).get();
+				List<JabatanPegawaiModel> jabatanpeg = jabatan.getListPegawai();
+				List<PegawaiModel> pegawailist = new ArrayList<>();
+				for(JabatanPegawaiModel jabpeg: jabatanpeg) {
+					pegawailist.add(jabpeg.getPegawai());
+				}
+				pegawai = pegawailist;
+			}
+			
+		}
+		model.addAttribute("listPencarian", pegawai);
+		return "cariPegawai";
 	}
+	
+	
+	@RequestMapping(value = "/pegawai/carifilter", method = RequestMethod.GET)
+	public @ResponseBody
+	List<PegawaiModel> findPegawaiByFilter(
+			 @RequestParam(value = "idProvinsi", required = true) Long idProvinsi, @RequestParam(value = "idInstansi", required = true) Long idInstansi) {
+		ProvinsiModel provinsi = provinsiService.getProvinsiById(idProvinsi);
+		System.out.println(provinsi.getNama());
+		InstansiModel instansi = instansiService.findInstansiById(idInstansi);
+		System.out.println(instansi.getNama());
+	    return instansi.getListPegawai();
+	}
+
 }
