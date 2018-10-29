@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.apap.tugas1.model.InstansiModel;
 import com.apap.tugas1.model.PegawaiModel;
+import com.apap.tugas1.repository.JabatanPegawaiDb;
 import com.apap.tugas1.repository.PegawaiDb;
 
 
@@ -18,6 +19,9 @@ import com.apap.tugas1.repository.PegawaiDb;
 public class PegawaiServiceImpl implements PegawaiService{
 	@Autowired
 	private PegawaiDb pegawaiDb;
+	@Autowired
+	private JabatanPegawaiDb jabatanPegawaiDb;
+	
 	@Override
 	public PegawaiModel getPegawaiDetailByNip(String nip) {
 		// TODO Auto-generated method stub
@@ -74,8 +78,7 @@ public class PegawaiServiceImpl implements PegawaiService{
 	}
 
 	@Override
-	public void updatePegawai(PegawaiModel pegawai,String nip) {
-		// TODO Auto-generated method stub
+	public void updatePegawai(PegawaiModel pegawai, String nip) {
 		PegawaiModel newPegawai = pegawaiDb.findByNip(nip);
 		newPegawai.setNama(pegawai.getNama());
 		newPegawai.setNip(pegawai.getNip());
@@ -84,6 +87,15 @@ public class PegawaiServiceImpl implements PegawaiService{
 		newPegawai.setTempatLahir(pegawai.getTempatLahir());
 		newPegawai.setInstansi(pegawai.getInstansi());
 		newPegawai.setListJabatan(pegawai.getListJabatan());
+		int jumlahList = pegawai.getListJabatan().size();
+		for (int i = 0; i<jumlahList; i++) {
+			pegawai.getListJabatan().get(i).setJabatan(newPegawai.getListJabatan().get(i).getJabatan());
+		}
+		
+		for (int i = jumlahList; i < newPegawai.getListJabatan().size(); i++) {
+			newPegawai.getListJabatan().get(i).setPegawai(pegawai);
+			jabatanPegawaiDb.save(newPegawai.getListJabatan().get(i));
+		}
 		pegawaiDb.save(newPegawai);
 	}
 	

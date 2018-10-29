@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.apap.tugas1.model.InstansiModel;
 import com.apap.tugas1.model.JabatanModel;
@@ -93,7 +94,8 @@ public class PegawaiController {
 		jabatanPegawai.setPegawai(pegawai);
 		pegawai.getListJabatan().add(jabatanPegawai);
 		List<ProvinsiModel> daftarProvinsi = provinsiService.getAllProvinsi();
-		List<InstansiModel> daftarInstansi = instansiService.getAllInstansi();
+		ProvinsiModel provPertama = daftarProvinsi.get(0);
+		List<InstansiModel> daftarInstansi = provPertama.getListInstansi();
 		List<JabatanModel> daftarJabatan = jabatanService.getAll();
 		model.addAttribute("pegawai", pegawai);
 		model.addAttribute("daftarJabatan",daftarJabatan);
@@ -136,6 +138,7 @@ public class PegawaiController {
 		return "submit-add";
 	}
 	
+	
 	@RequestMapping(value="/pegawai/tambah", method=RequestMethod.POST)
 	private String tambahPegawaiSubmit(@ModelAttribute PegawaiModel pegawai, Model model) {
 		pegawaiService.addPegawai(pegawai);
@@ -159,10 +162,36 @@ public class PegawaiController {
 		}
 		return "not-found";
 	}
+	@RequestMapping(value="/pegawai/ubah", method=RequestMethod.POST, params= {"addJabatan"})
+	private String addRowUpdateJabatan(@ModelAttribute PegawaiModel pegawai, Model model) {
+		JabatanPegawaiModel jabatan = new JabatanPegawaiModel();
+		jabatan.setPegawai(pegawai);
+		pegawai.getListJabatan().add(jabatan);
+		List<ProvinsiModel> daftarProvinsi = provinsiService.getAllProvinsi();
+		List<InstansiModel> daftarInstansi = new ArrayList<InstansiModel>();
+		daftarInstansi = daftarProvinsi.get(0).getListInstansi();
+		List<JabatanModel> daftarJabatan = jabatanService.getAll();
+		model.addAttribute("daftarJabatan", daftarJabatan);
+		model.addAttribute("daftarInstansi",daftarInstansi);
+		model.addAttribute("daftarProvinsi", daftarProvinsi);
+		model.addAttribute("pegawai", pegawai);
+		return "update-pegawai";
+	}
+	
 	
 	@RequestMapping(value="/pegawai/ubah", method=RequestMethod.POST)
-	private String submitUbahPegawai(@ModelAttribute PegawaiModel pegawai) {
-		pegawaiService.updatePegawai(pegawai, pegawai.getNip());
+	private String submitUbahPegawai(@ModelAttribute PegawaiModel newPegawai) {
+		PegawaiModel pegawai = pegawaiService.getPegawaiDetailByNip(newPegawai.getNip());
+		String nip = pegawaiService.generateNip(newPegawai);
+		newPegawai.setNip(nip);
+		pegawaiService.updatePegawai(newPegawai, pegawai.getNip());
 		return "suksesUbah";
+	}
+	
+	@RequestMapping(value="/pegawai/cekInstansi", method=RequestMethod.GET)
+	private @ResponseBody List<InstansiModel> findAllInstansi(@RequestParam(value="provinsiId", required=true) Long provinsiId){
+		ProvinsiModel provinsi = provinsiService.getProvinsiById(provinsiId);
+		List<InstansiModel> daftarInstansi = instansiService.getInstansiByProvinsi(provinsi);
+		return daftarInstansi;
 	}
 }

@@ -1,6 +1,7 @@
 package com.apap.tugas1.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -20,5 +21,11 @@ public class ProvinsiServiceImpl implements ProvinsiService{
 		// TODO Auto-generated method stub
 		return provinsiDb.findAll();
 	}
+	@Override
+	public ProvinsiModel getProvinsiById(Long id) {
+		// TODO Auto-generated method stub
+		return provinsiDb.findById(id).get();
+	}
+
 
 }
